@@ -13,7 +13,7 @@ public class Task1Job2MapperMovie extends Mapper<LongWritable, Text, Text, Text>
 
     public String[] extractMovieIdAndTitle(String line) {
         String[] fields = new String[2];
-        String[] split = line.split(",");
+        String[] split = line.trim().split(",");
 
         fields[MOVIE_ID] = split[MOVIE_ID];
         fields[TITLE] = "";
@@ -36,7 +36,7 @@ public class Task1Job2MapperMovie extends Mapper<LongWritable, Text, Text, Text>
         }
 
         String line = value.toString();
-        String[] fields = extractMovieIdAndTitle(line.trim());
+        String[] fields = extractMovieIdAndTitle(line);
 
         Text movieId = new Text(fields[MOVIE_ID]);
         Text resValue = new Text(MAPPER_TYPE + "," + fields[TITLE]);
