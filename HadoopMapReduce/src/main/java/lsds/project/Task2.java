@@ -11,14 +11,15 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
 public class Task2 {
-    private final static String JOB_1_NAME = "NumberOfLikesPerMovie";
-    private final static String JOB_2_NAME = "MoviePerNumberOfLikes";
+    public final static String JOB_1_NAME = "NumberOfLikesPerMovie";
+    public final static String JOB_2_NAME = "MoviePerNumberOfLikes";
+    public final static String TASK_NAME = "task2";
 
     public static void main(String[] args) throws Exception  {
         Configuration c = new Configuration();
-        String[] files = new GenericOptionsParser(c, args).getRemainingArgs();
-        Path input = new Path(files[0]);
-        Path outputJob1 = new Path(files[1] + "_" + JOB_1_NAME);
+//        String[] files = new GenericOptionsParser(c, args).getRemainingArgs();
+        Path input = new Path("/" + Task1.TASK_NAME + "_" + Task1.JOB_2_NAME);
+        Path outputJob1 = new Path("/" + TASK_NAME + "_" + JOB_1_NAME);
         FileSystem fs = FileSystem.get(c);
         if(fs.exists(outputJob1)){
             fs.delete(outputJob1, true);
@@ -35,7 +36,7 @@ public class Task2 {
         FileOutputFormat.setOutputPath(job1, outputJob1);
         job1.waitForCompletion(true);
 
-        Path outputJob2 = new Path(files[1] + "_" + JOB_2_NAME);
+        Path outputJob2 = new Path("/" + TASK_NAME + "_" + JOB_2_NAME);
 
         if(fs.exists(outputJob2)){
             fs.delete(outputJob2, true);

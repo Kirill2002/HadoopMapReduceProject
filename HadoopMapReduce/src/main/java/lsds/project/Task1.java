@@ -10,20 +10,20 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.util.GenericOptionsParser;
 
 public class Task1 {
-    private final static String ratingsPath = "ratings.csv";
-    private final static String moviesPath = "movies.csv";
-    private final static String JOB_1_NAME = "HighestRatedMovieIDPerUser";
-    private final static String JOB_2_NAME = "HighestRatedMoviePerUser";
+    private final static String RATINGS_PATH = "/ratings.csv";
+    private final static String MOVIES_PATH = "/movies.csv";
+    public final static String JOB_1_NAME = "HighestRatedMovieIDPerUser";
+    public final static String JOB_2_NAME = "HighestRatedMoviePerUser";
+    public final static String TASK_NAME = "task1";
 
     public static void main(String[] args) throws Exception  {
         Configuration c = new Configuration();
-        String[] files = new GenericOptionsParser(c, args).getRemainingArgs();
-        Path inputRatings = new Path(ratingsPath);
-        Path inputMovies = new Path(moviesPath);
-        Path outputJob1 = new Path(files[0] + "_" + JOB_1_NAME);
+//        String[] files = new GenericOptionsParser(c, args).getRemainingArgs();
+        Path inputRatings = new Path(RATINGS_PATH);
+        Path inputMovies = new Path(MOVIES_PATH);
+        Path outputJob1 = new Path("/" + TASK_NAME + "_" + JOB_1_NAME);
         FileSystem fs = FileSystem.get(c);
         if(fs.exists(outputJob1)){
             fs.delete(outputJob1, true);
@@ -40,14 +40,13 @@ public class Task1 {
         FileOutputFormat.setOutputPath(job1, outputJob1);
         job1.waitForCompletion(true);
 
-        Path outputJob2 = new Path(files[0] + "_" + JOB_2_NAME);
+        Path outputJob2 = new Path("/" +TASK_NAME + "_" + JOB_2_NAME);
 
         if(fs.exists(outputJob2)){
             fs.delete(outputJob2, true);
         }
         Job job2 = new Job(c, JOB_2_NAME);
         job2.setJarByClass(Task1.class);
-//        j2.setMapperClass(Task1Job1Mapper.class);
         job2.setReducerClass(Task1Job2Reducer.class);
         job2.setMapOutputKeyClass(Text.class);
         job2.setMapOutputValueClass(Text.class);
